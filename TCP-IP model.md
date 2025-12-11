@@ -18,3 +18,8 @@
 以太网就是一种在局域网内，使得附件的设备能够进行通讯的技术。  
 MAC地址就是在以太网中传输的地址，所以网络接口层，又给消息加上了MAC头部。  
 <img width="905" height="501" alt="image" src="https://github.com/user-attachments/assets/bd9fe98f-fbda-4149-aea7-5d2ca8bff80b" />
+# 从浏览器键入网页，到显示网页，到底发生了什么？
+## HTTP
+浏览器首先做的是把键入的URL，解析成为发给web服务器的请求消息。  
+首先我们要搞清楚URL的组成：
+<img width="1503" height="1879" alt="image" src="https://github.com/user-attachments/assets/9d8be048-adaf-4a34-8798-d0e8678607cb" />
