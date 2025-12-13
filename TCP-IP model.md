@@ -78,7 +78,56 @@ TCP还会做拥塞控制，通信双方各声明一个窗口（缓存大小）�
 然后客户端发起连接SYN，之后处于SYN-Sent状态。  
 接着服务端收到连接，返回SYN，并且ACK客户端的SYN，之后处于SYN_RCVD状态。  
 客户端收到服务端的SYN和ACK后，发送对SYN确定的ACK，之后处于ESTABLISHED状态。  
-所以三次握手目的是保证双方都有接收和发送的能力。
+所以三次握手目的是保证双方都有接收和发送的能力。  
+### TCP分割数据
+如果HTTP的请求信息过长，超过了MSS的长度，TCP是会将数据分割成一块块的数据包来分别发送的。
+<img width="1067" height="422" alt="image" src="https://github.com/user-attachments/assets/6d68cb50-fe01-40cf-879f-e91261ff0a98" />
+MTU：一个网络包的最大长度，在以太网中，这个长度为1500字节。  
+MSS: 除去IP和TCP头部后，一个网络包的最大长度。  
+数据会被以MSS的长度为单位拆分，拆分出来的每一块数据都会被放进单独的数据包中，然后加上TCP和IP头部。  
+<img width="1142" height="702" alt="image" src="https://github.com/user-attachments/assets/6fb5e8f9-4379-4337-bb81-bd4f28ed6359" />
+
+TCP协议中有两个端口，一个是浏览器监听的端口，通常是随机生成的，一个是Web服务器监听的端口，通常是80(HTTP)或443(HTTPS)。至此，网络包的报文如下：  
+<img width="1233" height="1038" alt="image" src="https://github.com/user-attachments/assets/d755ac8d-bee7-443b-965e-fc0063ff584b" />
+
+## IP
+TCP 模块在执行连接、收发、断开等各阶段操作时，都需要委托 IP 模块将数据封装成网络包发给通信对象。  
+### IP包头形式
+<img width="906" height="1806" alt="image" src="https://github.com/user-attachments/assets/c5b17545-7450-4b44-97c5-458f51e474eb" />
+在IP协议里面需要有源地址IP和目标地址IP。  
+因为HTTP是经过TCP传输的，所以在IP包头的协议号，要写成06(十六进制)。  
+假设客户端有多个网卡，在填写源地址IP时，就需要判断到底应该填写哪个地址。这个判断相当于在多块网卡中判断应该使用哪个一块网卡来发送包。这个时候就需要用路由表规则。  
+至此，网络包的报文如下图：
+<img width="1851" height="2729" alt="image" src="https://github.com/user-attachments/assets/1b683f2b-7791-4127-a4c8-81f676defbfe" />
+
+## MAC
+生成了IP头部之后，接下来网络包还需要加上MAC头部。MAC 头部是以太网使用的头部，它包含了接收方和发送方的 MAC 地址等信息。
+<img width="558" height="558" alt="image" src="https://github.com/user-attachments/assets/60096e53-1da1-45a2-8547-f57fd044da15" />
+一般在TCP/IP通信里，协议类型只有：  
+0800：IP协议  
+0806：ARP协议  
+MAC的发送方和接收方的地址如何确认呢？发送方的地址确认很简单，是在网卡生产时写入到 ROM 里的，只要将这个值读取出来写入到 MAC 头部就可以了。  
+接收方的地址确认比较复杂，首先需要查找路由表来搞清楚把包发给哪个IP，知道后如何得到MAC地址呢？这时需要用ARP协议。ARP协议会在以太网中，以广播的形式查找MAC地址：
+<img width="594" height="498" alt="image" src="https://github.com/user-attachments/assets/d5237ac2-bad3-4e9b-992c-10817d6c5a54" />
+需要理解的关键一点是，协议栈不需要知道，也不能知道目标服务器的MAC地址，因为MAC地址是用在同一个以太网中的，所以实际上得到是下一跳的目标设备的MAC地址。
+
+## 网卡
+网络包只是一串网络信息，需要转换成电信号来通过网线传输，这时就需要网卡，而控制网卡的是网卡的驱动程序。  
+网卡驱动获取网络包后，会将其复制到网卡内的缓存区域，然后会在开头添加上报头和起始帧分界符，在末尾加上用来检验错误的帧校验序列。  
+<img width="968" height="392" alt="image" src="https://github.com/user-attachments/assets/8c5ceb14-f474-40f3-ab59-b2aac59c228a" />
+起始帧分界符是一个用来表示包起始位置的标记  
+末尾的FCS（帧校验序列）用来检查包传输过程是否有损坏  
+
+## 交换机
+首先，电信号到达网线接口，交换机里的模块进行接收，接下来交换机里的模块将电信号转换为数字信号。然后通过包末尾的FCS校验错误，如果没问题则放到缓冲区。这部分操作基本和计算机的网卡相同，但交换机的工作方式和网卡不同。  
+计算机的网卡本身具有MAC地址，并通过核对收到的包的接收方 MAC 地址判断是不是发给自己的，如果不是发给自己的则丢弃；相对地，交换机的端口不核对接收方 MAC 地址，而是直接接收所有的包并存放到缓冲区中。因此，和网卡不同，交换机的端口不具有MAC地址。
+
+
+
+
+
+
+
 
 
 
