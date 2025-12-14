@@ -1,4 +1,4 @@
-<img width="1280" height="642" alt="image" src="https://github.com/user-attachments/assets/5c5f238f-6e00-4fdf-afc3-978a738cb80d" /># HTTP基本概念
+# HTTP基本概念
 ## 什么是HTTP？
 HTTP 是超文本传输协议，也就是HyperText Transfer Protocol。  
 或者说，HTTP是一种在计算机世界专门在两点之间传输文字，图片，视频等超文本数据的一种约定和规范。
@@ -19,6 +19,17 @@ HTTP 是超文本传输协议，也就是HyperText Transfer Protocol。
 501 Not Implemented: 表示客户端请求的功能还不支持,类似“即将开业，敬请期待”的意思。  
 502 Bad GateWay: 通常是服务器作为网关或代理时返回的错误码，表示服务器自身工作正常，访问后端服务器发生了错误。  
 503 Server Unavailable: 表示服务器当前很忙，暂时无法响应客户端，类似“网络服务正忙，请稍后重试”的意思。
+## HTTP常见字段
+HOST:客户端发送请求时，用来指定服务器的域名。  
+有了HOST字段,就可以将请求发给同一台服务器上的不同网站.  
+Content-Length:服务器在返回数据时，会有 Content-Length 字段，表明本次回应的数据长度。  
+Connection: Connection 字段最常用于客户端要求服务器使用「HTTP 长连接」机制，以便其他请求复用。HTTP 长连接的特点是，只要任意一端没有明确提出断开连接，则保持 TCP 连接状态。HTTP/1.1 版本的默认连接都是长连接，但为了兼容老版本的 HTTP，需要指定 Connection 首部字段的值为 Keep-Alive。开启了 HTTP Keep-Alive 机制后， 连接就不会中断，而是保持连接。当客户端发送另一个请求时，它会使用同一个连接，一直持续到客户端或服务器端提出断开连接。  
+Content-type:用于服务器回应时，告诉客户端，本次数据是什么格式。客户端请求的时候，可以使用 Accept 字段声明自己可以接受哪些数据格式。  
+Content-encoding:字段说明数据的压缩方法。表示服务器返回的数据使用了什么压缩格式.客户端在请求时，用 Accept-Encoding 字段说明自己可以接受哪些压缩方法。  
+
+
+
+
 
 
 
