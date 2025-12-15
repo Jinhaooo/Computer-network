@@ -14,7 +14,7 @@ Cache-control的优先级更高，而且选项更多，设置更加精细，一�
 ## 协商缓存  
 当我们在浏览器使用开发者工具的时候，你可能会看到过某些请求的响应码是 304，这个是告诉浏览器可以使用本地缓存的资源，这种通过服务器告诉客户端能否使用本地缓存的方式称为协商缓存。  
 <img width="1017" height="1127" alt="image" src="https://github.com/user-attachments/assets/fb863efd-47ee-4963-950e-cd2bc4d834d4" />  
-<img width="1017" height="1127" alt="image" src="https://github.com/user-attachments/assets/2c9b7b4b-9ce5-4f71-b9fa-d985a99d4f6b" />  
+
 协商缓存就是与服务器协商之后，通过协商结果来判断是否使用本地缓存。  
 协商缓存可以基于两种头部来实现。  
 第一种：请求头部中的 If-Modified-Since 字段与响应头部中的 Last-Modified 字段实现，这两个字段的意思是：  
