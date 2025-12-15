@@ -34,7 +34,27 @@ Etag的优先级要比Last-Modified的更高，这时因为Etag能够解决一�
 
 注意，协商缓存的这两个字段也需要配合强缓存Cache-control来使用，也就是说只有未命中强制缓存的情况下，才会启用协商缓存。  
 
-<img width="1348" height="1122" alt="image" src="https://github.com/user-attachments/assets/4da86f30-2076-49e9-83f4-a68bc5bb0c66" />
+<img width="1348" height="1122" alt="image" src="https://github.com/user-attachments/assets/4da86f30-2076-49e9-83f4-a68bc5bb0c66" />  
+
+强缓存肯定是最快的，为什么协商缓存在发送了HTTP请求情况下，还是会快很多呢？  
+主要节省的开销  
+
+数据传输时间
+
+   假设一个 2MB 的 JS 文件：  
+   - 完整传输：2MB ÷ 1MB/s = 2 秒  
+   - 304 响应：仅几百字节，<10ms  
+
+服务器处理时间
+
+304 响应：仅比对 ETag/Last-Modified，无需读取文件内容  
+200 响应：需要完整读取并传输文件  
+
+
+TCP 拥塞控制影响  
+
+小数据包（304）几乎不受拥塞控制影响  
+大文件需要多个 TCP 窗口，受慢启动和拥塞避免算法限制  
 
 
 
