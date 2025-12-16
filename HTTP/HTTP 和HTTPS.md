@@ -1,4 +1,4 @@
-<img width="1276" height="636" alt="image" src="https://github.com/user-attachments/assets/5788427d-f921-49f2-b40d-ae3f50d00b9b" /># HTTP 和 HTTPS
+# HTTP 和 HTTPS
 ## HTTP和HTTPS的区别  
 1.HTTPS在 TCP 和 HTTP 网络层之间加入了 SSL/TLS 安全协议，使得报文能够加密传输。  
 2.HTTPS 在 TCP 三次握手之后，还需进行 SSL/TLS 的握手过程，才可进入加密报文传输。  
